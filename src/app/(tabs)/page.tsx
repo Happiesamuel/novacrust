@@ -1,5 +1,14 @@
-import React from "react";
+"use client";
 
-export default function page() {
-  return <div>page</div>;
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function Page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/crypto-cash");
+  }, [router]);
+
+  return null;
 }

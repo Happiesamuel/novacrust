@@ -25,7 +25,7 @@ export default function Page() {
   }
   return (
     <div className="flex items-center justify-center flex-col">
-      <div className="space-y-6 text-center">
+      <div className="space-y-6 text-center mt-6">
         <h4 className="text-primary text-3xl font-medium">Coming Soon!</h4>
         <p className="text-grey-200 text-xl text-center">
           Crypto to Fiat Loan is almost here.

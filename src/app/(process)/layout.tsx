@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "../globals.css";
-import Tabs from "@/components/tab/Tabs";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -25,10 +24,9 @@ export default function RootLayout({
       <body
         className={`${outfit.className} bg-primary flex items-center justify-center min-h-screen antialiased`}
       >
-        <div className="max-w-160 w-full min-h-160 bg-white border border-sky rounded-[30px]">
+        <div className="max-w-160 w-full min-h-160 bg-white relative border border-sky rounded-[30px]">
           <div className="flex items-center mx-auto max-w-130 justify-center py-8 flex-col">
-            <Tabs />
-            <main className="mt-8"> {children}</main>
+            <main className=" w-full "> {children}</main>
           </div>
         </div>
       </body>
