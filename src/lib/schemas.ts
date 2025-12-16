@@ -16,8 +16,8 @@ export const StepOneSchema = z.object({
 
   receiveChain: z
     .string()
-    .min(1, "Please select a chain")
-    .refine((val) => val.trim() !== "", "Chain cannot be empty"),
+    .min(1, "Please select a currency")
+    .refine((val) => val.trim() !== "", "Currency cannot be empty"),
 
   payFrom: z
     .string()

@@ -1,7 +1,7 @@
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 
 import { Form } from "../ui/form";
 import { useEffect } from "react";
@@ -9,6 +9,9 @@ import { StepOneSchema } from "@/lib/schemas";
 import Pays from "../Pays";
 import SelectPays from "../SelectPays";
 import { Button } from "../ui/button";
+import { currencies, payfrom } from "@/lib/constants";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const chain = [
   { label: "ETH", value: "eth", slug: "USDT - ETH", img: "/eth.png" },
@@ -16,22 +19,14 @@ const chain = [
   { label: "TON", value: "ton", slug: "USDT - TON", img: "/ton.png" },
   { label: "BNB", value: "bnb", slug: "USDT - BNB", img: "/bnb.png" },
 ];
-const payfrom = [
-  { label: "Metamask", value: "metamask", img: "/metmsk.png" },
-  { label: "Rainbow", value: "rainbow", img: "/rainbow.png" },
-  { label: "WalletConnect", value: "connect", img: "/connect.png" },
-  {
-    label: "Other Crypto Wallets (Binance, Conibase, Bybit etc)",
-    value: "others",
-    img: "/wallet.png",
-  },
-];
+
 const STORAGE_KEY = "step-one";
 
 type FormInput = z.input<typeof StepOneSchema>;
 type FormOutput = z.output<typeof StepOneSchema>;
 
 export default function StepOne() {
+  const router = useRouter();
   const form = useForm<FormInput>({
     resolver: zodResolver(StepOneSchema),
     defaultValues: {
@@ -43,7 +38,44 @@ export default function StepOne() {
       payTo: "",
     },
   });
-  // ✅ Load from localStorage on mount
+  const payAmount = useWatch({
+    control: form.control,
+    name: "payAmount",
+  }) as number;
+
+  const receiveAmount = useWatch({
+    control: form.control,
+    name: "receiveAmount",
+  }) as number;
+
+  useEffect(() => {
+    if (!payAmount) return;
+
+    const next = payAmount * 5;
+    const current = form.getValues("receiveAmount");
+
+    if (current !== next) {
+      form.setValue("receiveAmount", next, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [payAmount, form]);
+
+  useEffect(() => {
+    if (!receiveAmount) return;
+
+    const next = receiveAmount / 5;
+    const current = form.getValues("payAmount");
+
+    if (current !== next) {
+      form.setValue("payAmount", next, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [receiveAmount, form]);
+
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -51,7 +83,6 @@ export default function StepOne() {
     }
   }, [form]);
 
-  // ✅ Auto-save on every change
   useEffect(() => {
     const subscription = form.watch((value) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
@@ -60,12 +91,26 @@ export default function StepOne() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  function onSubmit(values: FormOutput) {
-    console.log(values); // ✅ all numbers correctly typed
-  }
+  const onSubmit: SubmitHandler<FormInput> = (values) => {
+    const parsed: FormOutput = StepOneSchema.parse(values);
+
+    console.log(parsed);
+    router.push("/details");
+  };
+  const onError = (errors: typeof form.formState.errors) => {
+    const firstErrorKey = Object.keys(errors)[0] as keyof FormInput;
+    if (firstErrorKey) {
+      const message = errors[firstErrorKey]?.message as string;
+      toast.error(message);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="space-y-6"
+      >
         <Pays
           label="You pay"
           name="payAmount"
@@ -77,7 +122,7 @@ export default function StepOne() {
           label="You recieve"
           name="receiveAmount"
           name2="receiveChain"
-          arr={chain}
+          arr={currencies}
           control={form.control}
         />
         <SelectPays

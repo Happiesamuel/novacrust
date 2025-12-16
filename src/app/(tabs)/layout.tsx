@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "../globals.css";
 import Tabs from "@/components/tab/Tabs";
-
+import { Toaster } from "@/components/ui/sonner";
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
@@ -28,7 +28,8 @@ export default function RootLayout({
         <div className="max-w-160 w-full min-h-160 bg-white border border-sky rounded-[30px]">
           <div className="flex items-center mx-auto max-w-130 justify-center py-8 flex-col">
             <Tabs />
-            <main className="mt-8"> {children}</main>
+            <main className="mt-8"> {children}</main>{" "}
+            <Toaster position="top-center" />
           </div>
         </div>
       </body>
