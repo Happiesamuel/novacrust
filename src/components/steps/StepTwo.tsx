@@ -1,19 +1,11 @@
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useEffect } from "react";
 import { StepTwoSchema } from "@/lib/schemas";
-import SelectPays from "../SelectPays";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -23,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const STORAGE_KEY = "step-two";
 
@@ -30,6 +24,7 @@ type FormInput = z.input<typeof StepTwoSchema>;
 type FormOutput = z.output<typeof StepTwoSchema>;
 
 export default function StepTwo() {
+  const router = useRouter();
   const form = useForm<FormInput>({
     resolver: zodResolver(StepTwoSchema),
   });
@@ -50,9 +45,19 @@ export default function StepTwo() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  function onSubmit(values: FormOutput) {
-    console.log(values); // ✅ all numbers correctly typed
-  }
+  const onSubmit: SubmitHandler<FormInput> = (values) => {
+    const parsed: FormOutput = StepTwoSchema.parse(values);
+
+    console.log(parsed);
+    router.push("/detailsTwo");
+  };
+  const onError = (errors: typeof form.formState.errors) => {
+    const firstErrorKey = Object.keys(errors)[0] as keyof FormInput;
+    if (firstErrorKey) {
+      const message = errors[firstErrorKey]?.message as string;
+      toast.error(message);
+    }
+  };
   const arr = [
     { name: "GT Bank", slug: "gtb" },
     { name: "Access Bank", slug: "access" },
@@ -61,42 +66,55 @@ export default function StepTwo() {
   ];
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="space-y-8"
+      >
         <FormField
           control={form.control}
           name={"bank"}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium text-primary">
-                Bank
-              </FormLabel>
+          render={({ field }) => {
+            const selectedOption = arr.find((p) => p.slug === field.value);
+            return (
+              <FormItem>
+                <FormLabel className="text-base font-medium text-primary">
+                  Bank
+                </FormLabel>
 
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="border-input cursor-pointer border w-full rounded-full p-6">
-                    <SelectValue
-                      className="text-primary text-base"
-                      placeholder="Select an option"
-                    />
-                  </SelectTrigger>
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="border-input cursor-pointer border w-full rounded-full p-6">
+                      {selectedOption ? (
+                        <div className="flex items-center gap-2">
+                          <span>{selectedOption.name}</span>
+                        </div>
+                      ) : (
+                        <SelectValue
+                          className="text-primary text-base"
+                          placeholder="Select an option"
+                        />
+                      )}
+                    </SelectTrigger>
+                  </FormControl>
 
-                <SelectContent className="bg-white border-input">
-                  {arr?.map((pay) => (
-                    <SelectItem
-                      key={pay.slug}
-                      className="text-sm text-primary hover:bg-[#f5f5f5] cursor-pointer font-medium"
-                      value={pay.slug}
-                    >
-                      {pay.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <FormMessage />
-            </FormItem>
-          )}
+                  <SelectContent className="bg-white border-input">
+                    {arr?.map((pay) => (
+                      <SelectItem
+                        key={pay.slug}
+                        className="text-sm text-primary hover:bg-[#f5f5f5] cursor-pointer font-medium"
+                        value={pay.slug}
+                      >
+                        {pay.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            );
+          }}
         />
         <FormField
           control={form.control}
@@ -113,8 +131,6 @@ export default function StepTwo() {
                   {...field}
                 />
               </FormControl>
-
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -130,12 +146,10 @@ export default function StepTwo() {
                 <Input
                   disabled
                   className="border-[#e0e0e0] disabled:bg-secondary border focus-visible:ring focus-visible:ring-green-300 text-base placeholder:text-grey bg-white px-6! py-4! rounded-full"
-                  placeholder="Enter your account number"
+                  placeholder="Enter your account name"
                   {...field}
                 />
               </FormControl>
-
-              <FormMessage />
             </FormItem>
           )}
         />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "../globals.css";
+import { Toaster } from "sonner";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -26,7 +27,8 @@ export default function RootLayout({
       >
         <div className="max-w-160 w-full min-h-160 bg-white relative border border-sky rounded-[30px]">
           <div className="flex items-center mx-auto max-w-130 justify-center py-8 flex-col">
-            <main className=" w-full "> {children}</main>
+            <main className=" w-full "> {children}</main>{" "}
+            <Toaster position="top-center" />
           </div>
         </div>
       </body>
