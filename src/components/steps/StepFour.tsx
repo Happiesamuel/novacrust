@@ -1,12 +1,25 @@
-import { BsCopy } from "react-icons/bs";
+"use client";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { BsCopy } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { handleCopy } from "@/lib/utils";
+
+type StepOneData = {
+  [key: string]: string;
+};
+
 export default function StepFour() {
-  const item = localStorage.getItem("step-one")
-    ? JSON.parse(localStorage.getItem("step-one")!)
-    : {};
   const router = useRouter();
+
+  const [item] = useState<StepOneData | null>(() => {
+    if (typeof window === "undefined") return null;
+
+    const stored = localStorage.getItem("step-one");
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  if (!item) return null;
 
   return (
     <div className="flex items-center justify-center flex-col">
