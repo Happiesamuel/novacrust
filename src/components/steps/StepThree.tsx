@@ -22,7 +22,6 @@ export default function StepThree() {
   const form = useForm<FormInput>({
     resolver: zodResolver(StepThreeSchema),
   });
-  // ✅ Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -30,7 +29,6 @@ export default function StepThree() {
     }
   }, [form]);
 
-  // ✅ Auto-save on every change
   useEffect(() => {
     const subscription = form.watch((value) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
