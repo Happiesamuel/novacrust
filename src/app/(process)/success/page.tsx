@@ -1,9 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { handleCopy } from "@/lib/utils";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { BsCopy } from "react-icons/bs";
 
-export default function page() {
+export default function Page() {
+  const router = useRouter();
+  function handleClick() {
+    localStorage.clear();
+    router.push("/");
+  }
   return (
     <div className="">
       <div className="relative w-44 mx-auto h-6 aspect-video">
@@ -24,11 +31,15 @@ export default function page() {
             <p className="text-sm text-grey-200 ">Transaction ID</p>
             <div className="flex items-center gap-2">
               <p className="text-base text-primary ">NC123456789</p>
-              <BsCopy className="text-primary text-xl" />
+              <BsCopy
+                onClick={() => handleCopy("NC123456789")}
+                className="text-primary text-xl cursor-pointer"
+              />
             </div>
           </div>
         </div>
         <Button
+          onClick={handleClick}
           className="
     bg-white
   text-primary

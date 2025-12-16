@@ -3,18 +3,13 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { handleCopy } from "@/lib/utils";
 export default function StepFour() {
   const item = localStorage.getItem("step-one")
     ? JSON.parse(localStorage.getItem("step-one")!)
     : {};
   const router = useRouter();
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => toast.success("Copied to clipboard!"))
-      .catch(() => toast.error("Failed to copy"));
-  };
   return (
     <div className="flex items-center justify-center flex-col">
       <div className="rounded-full px-4 py-2 w-fit flex items-center gap-2 bg-button-text border border-sky">
