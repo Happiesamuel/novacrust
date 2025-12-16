@@ -30,9 +30,10 @@ export const StepOneSchema = z.object({
     .refine((val) => val.trim() !== "", "Wallet cannot be empty"),
 });
 export const StepTwoSchema = z.object({
-  accountNumber: z
-    .string({ message: "Please enter a valid account number" })
+  accountNumber: z.coerce
+    .number({ message: "Please enter a valid number" })
     .min(10, "Account number must be at least 10 chars"),
+
   accountName: z.string().optional(),
   bank: z
     .string({ message: "Please select a bank" })

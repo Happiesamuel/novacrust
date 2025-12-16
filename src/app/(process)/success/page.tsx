@@ -19,10 +19,10 @@ export default function Page() {
       <div className=" flex flex-col items-center mt-24 justify-center ">
         <Image src={"/success.png"} width={80} height={80} alt="logo" />
         <div className="space-y-2 text-center mt-8">
-          <p className="text-2xl font-medium text-[#000E10]">
+          <p className="text-xl sm:text-2xl font-medium text-[#000E10]">
             Your transaction is processing.
           </p>
-          <p className="text-xl  text-grey-200">
+          <p className="text-lg sm:text-xl  text-grey-200">
             The recipient will receive it shortly.
           </p>
         </div>

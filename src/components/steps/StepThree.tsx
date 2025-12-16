@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useEffect } from "react";
 import { StepThreeSchema } from "@/lib/schemas";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 import PhoneInputField from "../PhoneInput";
@@ -69,11 +68,13 @@ export default function StepThree() {
                 Recipient email
               </FormLabel>
               <FormControl>
-                <Input
-                  className="border-[#e0e0e0] border focus-visible:ring focus-visible:ring-green-300 text-base placeholder:text-grey bg-white px-6! py-4! rounded-full"
-                  placeholder="Enter recipient email"
-                  {...field}
-                />
+                <div className="px-6 py-2.5 bg-white rounded-full border border-[#e0e0e0] focus-within:ring focus-within:ring-green-300">
+                  <Input
+                    {...field}
+                    placeholder="Enter recipient email"
+                    className="p-0 text-base placeholder:text-grey shadow-none rounded-full w-full"
+                  />
+                </div>
               </FormControl>
             </FormItem>
           )}
@@ -84,15 +85,13 @@ export default function StepThree() {
           countryName="countryCode"
         />
 
-        <Button
-          type="submit"
+        <button
           className="
     bg-primary
     text-button-text
     text-base
     rounded-full
-    py-5
-    px-10 w-full
+  py-3.5 hover:bg-primary/90 transition-all duration-500 sm:py-5 w-full
     max-w-[80%]
     absolute
    bottom-8
@@ -100,9 +99,10 @@ export default function StepThree() {
     transform -translate-x-1/2
     cursor-pointer
   "
+          type="submit"
         >
           Next
-        </Button>
+        </button>
       </form>
     </Form>
   );

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 export default function Header({ title }: { title: string }) {
   const router = useRouter();
@@ -14,7 +13,7 @@ export default function Header({ title }: { title: string }) {
         className="cursor-pointer"
         src={"/ArrowLeft.png"}
       />
-      <h2 className="text-xl text-primary font-medium">{title}</h2>
+      <h2 className="text-lg sm:text-xl text-primary font-medium">{title}</h2>
       <div />
     </div>
   );

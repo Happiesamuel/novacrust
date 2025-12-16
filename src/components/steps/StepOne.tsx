@@ -4,11 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 
 import { Form } from "../ui/form";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { StepOneSchema } from "@/lib/schemas";
 import Pays from "../Pays";
 import SelectPays from "../SelectPays";
-import { Button } from "../ui/button";
 import { currencies, payfrom } from "@/lib/constants";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -27,6 +26,7 @@ type FormOutput = z.output<typeof StepOneSchema>;
 
 export default function StepOne() {
   const router = useRouter();
+  const lastChanged = useRef<"pay" | "receive" | null>(null);
   const form = useForm<FormInput>({
     resolver: zodResolver(StepOneSchema),
     defaultValues: {
@@ -42,39 +42,32 @@ export default function StepOne() {
     control: form.control,
     name: "payAmount",
   }) as number;
-
+  const rate = 973.5;
   const receiveAmount = useWatch({
     control: form.control,
     name: "receiveAmount",
   }) as number;
+  useEffect(() => {
+    if (lastChanged.current === "pay") return;
+    if (typeof payAmount !== "number") return;
+
+    const next = Number((payAmount * rate).toFixed(2));
+    form.setValue("receiveAmount", next, {
+      shouldValidate: false,
+      shouldDirty: true,
+    });
+  }, [payAmount]);
 
   useEffect(() => {
-    if (!payAmount) return;
+    if (lastChanged.current !== "receive") return;
+    if (typeof receiveAmount !== "number") return;
 
-    const next = payAmount * 5;
-    const current = form.getValues("receiveAmount");
-
-    if (current !== next) {
-      form.setValue("receiveAmount", next, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  }, [payAmount, form]);
-
-  useEffect(() => {
-    if (!receiveAmount) return;
-
-    const next = receiveAmount / 5;
-    const current = form.getValues("payAmount");
-
-    if (current !== next) {
-      form.setValue("payAmount", next, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  }, [receiveAmount, form]);
+    const next = Number((receiveAmount / rate).toFixed(6));
+    form.setValue("payAmount", next, {
+      shouldValidate: false,
+      shouldDirty: true,
+    });
+  }, [receiveAmount]);
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -115,6 +108,7 @@ export default function StepOne() {
           label="You pay"
           name="payAmount"
           name2="payChain"
+          current={(lastChanged.current = "pay")}
           arr={chain}
           control={form.control}
         />
@@ -123,6 +117,7 @@ export default function StepOne() {
           name="receiveAmount"
           name2="receiveChain"
           arr={currencies}
+          current={(lastChanged.current = "receive")}
           control={form.control}
         />
         <SelectPays
@@ -138,12 +133,12 @@ export default function StepOne() {
           label="Pay to"
         />
 
-        <Button
+        <button
           type="submit"
-          className="bg-primary w-full  rounded-full px-10! text-button-text text-base cursor-pointer! py-5!"
+          className="bg-primary w-full py-3.5 hover:bg-primary/90 transition-all duration-500 sm:py-5 rounded-full ! text-button-text text-base cursor-pointer! "
         >
           Convert now
-        </Button>
+        </button>
       </form>
     </Form>
   );

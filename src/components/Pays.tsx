@@ -11,7 +11,7 @@ import { Check, ChevronsUpDown, SearchIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { FormControl, FormField, FormItem } from "./ui/form";
 import { Button } from "./ui/button";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 import { Input } from "./ui/input";
@@ -21,6 +21,7 @@ type PaysProps<T extends FieldValues> = {
   name2: FieldPath<T>;
   label: string;
   arr: { slug: string; label: string; img: string; value: string }[];
+  current: string;
 };
 
 export default function Pays<T extends FieldValues>({
@@ -29,6 +30,7 @@ export default function Pays<T extends FieldValues>({
   name2,
   label,
   arr,
+  current,
 }: PaysProps<T>) {
   return (
     <div className="space-y-6">
@@ -45,6 +47,10 @@ export default function Pays<T extends FieldValues>({
                     {...field}
                     placeholder="0.00"
                     type="number"
+                    onChange={(e) => {
+                      current;
+                      field.onChange(Number(e.target.value));
+                    }}
                     className="text-2xl  font-semibold shadow-none "
                   />
                 </FormControl>
@@ -87,7 +93,7 @@ export default function Pays<T extends FieldValues>({
                       </FormControl>
                     </PopoverTrigger>
 
-                    <PopoverContent className="w-66 py-4 px-3 h-64 rounded-4xl border bg-white border-input">
+                    <PopoverContent className="w-66  py-4 px-3  h-64 absolute -right-16 rounded-4xl border bg-white border-input">
                       <Command>
                         <div className="rounded-4xl border-input border flex items-center px-4   gap-1">
                           <SearchIcon className="size-4  opacity-50" />
@@ -101,7 +107,7 @@ export default function Pays<T extends FieldValues>({
                                 key={framework.value}
                                 value={framework.value}
                                 className={cn(
-                                  "cursor-pointer flex items-center gap-2  p-3 rounded-2xl hover:bg-[#f5f5f5] text-primary text-sm font-medium",
+                                  "cursor-pointer flex items-center gap-2  p-3 rounded-2xl hover:bg-primary hover:text-white text-primary text-sm font-medium",
                                   field.value === framework.value
                                     ? "bg-[#f5f5f5]  "
                                     : ""

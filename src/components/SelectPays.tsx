@@ -1,12 +1,6 @@
 import Image from "next/image";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
+import { FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 import {
   Select,
@@ -51,7 +45,11 @@ export default function SelectPays<T extends FieldValues>({
                         height={24}
                         className="rounded-full"
                       />
-                      <span>{selectedOption.label}</span>
+                      <span className="overflow-hidden">
+                        {selectedOption.label.startsWith("Oth")
+                          ? "Others"
+                          : selectedOption.label}
+                      </span>
                     </div>
                   ) : (
                     <SelectValue
@@ -62,11 +60,11 @@ export default function SelectPays<T extends FieldValues>({
                 </SelectTrigger>
               </FormControl>
 
-              <SelectContent className="bg-white border-input">
+              <SelectContent className="bg-white border-input w-72">
                 {arr?.map((pay) => (
                   <SelectItem
                     key={pay.value}
-                    className="text-sm text-primary hover:bg-[#f5f5f5] cursor-pointer font-medium"
+                    className="text-sm text-primary hover:bg-primary hover:text-white cursor-pointer font-medium"
                     value={pay.value}
                   >
                     <Image

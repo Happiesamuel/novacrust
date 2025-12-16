@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useEffect } from "react";
 import { StepTwoSchema } from "@/lib/schemas";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -28,7 +27,6 @@ export default function StepTwo() {
   const form = useForm<FormInput>({
     resolver: zodResolver(StepTwoSchema),
   });
-  // ✅ Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -36,7 +34,6 @@ export default function StepTwo() {
     }
   }, [form]);
 
-  // ✅ Auto-save on every change
   useEffect(() => {
     const subscription = form.watch((value) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
@@ -100,7 +97,7 @@ export default function StepTwo() {
                     </SelectTrigger>
                   </FormControl>
 
-                  <SelectContent className="bg-white border-input">
+                  <SelectContent className="bg-white w-70 border-input">
                     {arr?.map((pay) => (
                       <SelectItem
                         key={pay.slug}
@@ -125,11 +122,15 @@ export default function StepTwo() {
                 Account number
               </FormLabel>
               <FormControl>
-                <Input
-                  className="border-[#e0e0e0] border focus-visible:ring focus-visible:ring-green-300 text-base placeholder:text-grey bg-white px-6! py-4! rounded-full"
-                  placeholder="Enter your account number"
-                  {...field}
-                />
+                <div className="px-6 py-2.5 bg-white rounded-full border border-[#e0e0e0] focus-within:ring focus-within:ring-green-300">
+                  <Input
+                    {...field}
+                    value={field.value as number | ""}
+                    placeholder="Enter your account number"
+                    type="number"
+                    className="p-0 text-base placeholder:text-grey shadow-none rounded-full w-full"
+                  />
+                </div>
               </FormControl>
             </FormItem>
           )}
@@ -143,26 +144,25 @@ export default function StepTwo() {
                 Account name
               </FormLabel>
               <FormControl>
-                <Input
-                  disabled
-                  className="border-[#e0e0e0] disabled:bg-secondary border focus-visible:ring focus-visible:ring-green-300 text-base placeholder:text-grey bg-white px-6! py-4! rounded-full"
-                  placeholder="Enter your account name"
-                  {...field}
-                />
+                <div className="px-6 py-2.5 bg-white rounded-full border border-[#e0e0e0] focus-within:ring focus-within:ring-green-300 peer-disabled:bg-secondary">
+                  <Input
+                    {...field}
+                    disabled
+                    placeholder="Enter your account name"
+                    className="peer p-0 text-base placeholder:text-grey shadow-none rounded-full w-full disabled:bg-secondary"
+                  />
+                </div>
               </FormControl>
             </FormItem>
           )}
         />
-
-        <Button
-          type="submit"
+        <button
           className="
     bg-primary
     text-button-text
     text-base
     rounded-full
-    py-5
-    px-10 w-full
+  py-3.5 hover:bg-primary/90 transition-all duration-500 sm:py-5 w-full
     max-w-[80%]
     absolute
    bottom-8
@@ -170,9 +170,10 @@ export default function StepTwo() {
     transform -translate-x-1/2
     cursor-pointer
   "
+          type="submit"
         >
           Next
-        </Button>
+        </button>
       </form>
     </Form>
   );

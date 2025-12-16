@@ -1,8 +1,6 @@
 import { BsCopy } from "react-icons/bs";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { handleCopy } from "@/lib/utils";
 export default function StepFour() {
   const item = localStorage.getItem("step-one")
@@ -53,15 +51,15 @@ export default function StepFour() {
           deposit
         </p>
       </div>
-      <Button
+
+      <button
         onClick={() => router.push("/success")}
         className="
     bg-primary
     text-button-text
     text-base
     rounded-full
-    py-5
-    px-10 w-full
+  py-3.5 hover:bg-primary/90 transition-all duration-500 sm:py-5 w-full
     max-w-[80%]
     absolute
    bottom-8
@@ -69,9 +67,10 @@ export default function StepFour() {
     transform -translate-x-1/2
     cursor-pointer
   "
+        type="submit"
       >
         I have sent it
-      </Button>
+      </button>
     </div>
   );
 }
