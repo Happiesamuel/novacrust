@@ -1,7 +1,6 @@
 "use client";
 import Header from "@/components/Header";
 import StepFour from "@/components/steps/StepFour";
-import StepThree from "@/components/steps/StepThree";
 
 export default function page() {
   return (
