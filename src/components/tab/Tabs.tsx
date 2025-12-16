@@ -25,7 +25,7 @@ export default function Tabs() {
               key={tab.val}
               onClick={() => handleClick(tab.val)}
               className={cn(
-                "relative z-10 sm:text-sm text-xs font-medium py-2 sm:py-2 px-2 sm:px-4 rounded-full transition-colors",
+                "relative z-10 sm:text-sm text-xs font-medium cursor-pointer py-2 sm:py-2 px-2 sm:px-4 rounded-full transition-colors",
                 isActive ? "text-white" : "text-grey"
               )}
             >

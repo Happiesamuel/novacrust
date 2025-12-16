@@ -27,8 +27,8 @@ export default function RootLayout({
       <body
         className={`${outfit.className} bg-primary flex items-center justify-center min-h-screen antialiased`}
       >
-        <div className="max-w-160 w-full my-4 min-h-160 bg-white border border-sky rounded-xl mx-3 sm:rounded-[30px] px-2.5">
-          <div className="flex items-center mx-auto max-w-130 justify-center py-8 flex-col">
+        <div className="max-w-160 w-full my-4 relative min-h-160 bg-white border border-sky rounded-xl mx-3 sm:rounded-[30px] px-2.5">
+          <div className="flex items-center relative mx-auto max-w-130 justify-center py-8 flex-col">
             <Tabs />
             <Presence>{children}</Presence>
             <Toaster position="top-center" />

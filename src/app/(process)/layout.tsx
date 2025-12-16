@@ -25,7 +25,7 @@ export default function RootLayout({
       <body
         className={`${outfit.className} bg-primary flex items-center justify-center min-h-screen antialiased`}
       >
-        <div className="max-w-160 w-full min-h-160 my-4 bg-white border border-sky mx-3 rounded-xl sm:rounded-[30px] px-2.5">
+        <div className="max-w-160 w-full min-h-160 my-4 relative bg-white border border-sky mx-3 rounded-xl sm:rounded-[30px] px-2.5">
           <div className="flex items-center mx-auto max-w-130 justify-center py-8 flex-col">
             <main className=" w-full "> {children}</main>{" "}
             <Toaster position="top-center" />
