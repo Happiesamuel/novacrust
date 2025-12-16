@@ -1,22 +1,17 @@
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useEffect } from "react";
 import { StepThreeSchema } from "@/lib/schemas";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 import PhoneInputField from "../PhoneInput";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const STORAGE_KEY = "step-three";
 
@@ -24,6 +19,7 @@ type FormInput = z.input<typeof StepThreeSchema>;
 type FormOutput = z.output<typeof StepThreeSchema>;
 
 export default function StepThree() {
+  const router = useRouter();
   const form = useForm<FormInput>({
     resolver: zodResolver(StepThreeSchema),
   });
@@ -44,13 +40,26 @@ export default function StepThree() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  function onSubmit(values: FormOutput) {
-    console.log(values); // ✅ all numbers correctly typed
-  }
+  const onSubmit: SubmitHandler<FormInput> = (values) => {
+    const parsed: FormOutput = StepThreeSchema.parse(values);
+
+    console.log(parsed);
+    router.push("/detailsThree");
+  };
+  const onError = (errors: typeof form.formState.errors) => {
+    const firstErrorKey = Object.keys(errors)[0] as keyof FormInput;
+    if (firstErrorKey) {
+      const message = errors[firstErrorKey]?.message as string;
+      toast.error(message);
+    }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="space-y-8"
+      >
         <FormField
           control={form.control}
           name="email"
@@ -66,8 +75,6 @@ export default function StepThree() {
                   {...field}
                 />
               </FormControl>
-
-              <FormMessage />
             </FormItem>
           )}
         />

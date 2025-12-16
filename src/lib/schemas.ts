@@ -40,7 +40,11 @@ export const StepTwoSchema = z.object({
     .refine((val) => val.trim() !== "", "Bank cannot be empty"),
 });
 export const StepThreeSchema = z.object({
-  email: z.string().min(10, "Account number must be at least 10 chars"),
-  phoneNumber: z.string().min(7, "Enter a valid phone number"),
-  countryCode: z.string().min(1, "Select country code"),
+  email: z.email({ message: "Please enter a valid email address" }),
+  phoneNumber: z
+    .string({ message: "Please enter a valid number" })
+    .min(7, "Enter a valid phone number"),
+  countryCode: z
+    .string({ message: "Select country code" })
+    .min(1, "Select country code"),
 });

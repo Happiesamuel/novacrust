@@ -4,6 +4,36 @@ export const tabs = [
   { name: "Cash to crypto", val: "cash-crypto" },
   { name: "Crypto to fiat loan", val: "crypto-loan" },
 ];
+export const countries = [
+  { code: "+234", label: "Nigeria", flag: "https://flagcdn.com/w20/ng.png" },
+  {
+    code: "+1",
+    label: "United States",
+    flag: "https://flagcdn.com/w20/us.png",
+  },
+  {
+    code: "+44",
+    label: "United Kingdom",
+    flag: "https://flagcdn.com/w20/gb.png",
+  },
+  { code: "+91", label: "India", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "+81", label: "Japan", flag: "https://flagcdn.com/w20/jp.png" },
+  { code: "+49", label: "Germany", flag: "https://flagcdn.com/w20/de.png" },
+  { code: "+33", label: "France", flag: "https://flagcdn.com/w20/fr.png" },
+  { code: "+61", label: "Australia", flag: "https://flagcdn.com/w20/au.png" },
+  { code: "+55", label: "Brazil", flag: "https://flagcdn.com/w20/br.png" },
+  { code: "+7", label: "Russia", flag: "https://flagcdn.com/w20/ru.png" },
+  {
+    code: "+27",
+    label: "South Africa",
+    flag: "https://flagcdn.com/w20/za.png",
+  },
+  { code: "+82", label: "South Korea", flag: "https://flagcdn.com/w20/kr.png" },
+  { code: "+34", label: "Spain", flag: "https://flagcdn.com/w20/es.png" },
+  { code: "+86", label: "China", flag: "https://flagcdn.com/w20/cn.png" },
+  { code: "+39", label: "Italy", flag: "https://flagcdn.com/w20/it.png" },
+];
+
 export const currencies = [
   {
     label: "NGN",
